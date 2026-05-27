@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>孩子狀態初步觀察問卷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F6F2;--card:#FFFFFF;--border:#E4E2DB;--border2:#C8C6BE;
+  --text:#1A1916;--text2:#5F5D57;--text3:#9B9890;
+  --blue:#185FA5;--blue-bg:#E6F1FB;--blue-b:#B5D4F4;
+  --green:#3B6D11;--green-bg:#EAF3DE;--green-b:#C0DD97;
+  --red:#A32D2D;--red-bg:#FCEBEB;--red-b:#F7C1C1;
+  --amber:#854F0B;--amber-bg:#FAEEDA;--amber-b:#FAC775;
+  --gray:#5F5E5A;--gray-bg:#F1EFE8;--gray-b:#D3D1C7;
+  --radius:14px;--radius-sm:9px;
+}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.hero{background:linear-gradient(135deg,#0C3B6E 0%,#185FA5 55%,#2A7AC0 100%);padding:2.5rem 1.5rem 2rem;text-align:center;color:#fff}
+.hero-badge{display:inline-block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 14px;font-size:11px;letter-spacing:.1em;margin-bottom:1rem}
+.hero h1{font-size:clamp(19px,4vw,26px);font-weight:700;line-height:1.4;margin-bottom:.6rem}
+.hero p{font-size:13px;opacity:.82;line-height:1.7;max-width:500px;margin:0 auto}
+
+.sticky{background:rgba(247,246,242,0.95);backdrop-filter:blur(6px);padding:.65rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.pg-top{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:.4rem}
+.pg-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.pg-fill{height:100%;background:linear-gradient(90deg,#185FA5,#2A9FD0);border-radius:3px;transition:width .3s}
+
+.container{max-width:640px;margin:0 auto;padding:1.5rem 1rem 4rem}
+
+.notice{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1.1rem;margin-bottom:1.25rem;font-size:12px;color:var(--text2);line-height:1.7;display:flex;gap:10px;align-items:flex-start}
+.notice-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+.sec{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.35rem 1.35rem;margin-bottom:1rem}
+.sec-head{display:flex;align-items:flex-start;gap:12px;padding-bottom:.9rem;margin-bottom:.9rem;border-bottom:1px solid var(--border)}
+.sec-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.sec-title{font-size:15px;font-weight:700;color:var(--text);line-height:1.35}
+.sec-ref{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.55}
+
+.scale-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:.9rem}
+.sc{font-size:11px;padding:3px 9px;border-radius:6px;background:var(--bg);color:var(--text2);border:1px solid var(--border)}
+
+.qr{margin-bottom:1rem}
+.ql{font-size:13.5px;color:var(--text);margin-bottom:.5rem;line-height:1.55;font-weight:500}
+.rr{display:flex;gap:5px}
+.rb{flex:1;border:1px solid var(--border2);background:var(--bg);border-radius:var(--radius-sm);padding:8px 4px;font-size:14px;cursor:pointer;color:var(--text2);transition:all .12s;text-align:center;font-family:'Noto Sans TC',sans-serif;line-height:1}
+.rb span.lbl{font-size:10px;display:block;color:var(--text3);margin-top:3px;line-height:1.3}
+.rb:hover{background:var(--blue-bg);border-color:var(--blue-b);color:var(--blue)}
+.rb.sel{background:var(--blue-bg);border-color:var(--blue);color:var(--blue);font-weight:700}
+
+.btn-submit{width:100%;margin-top:1.5rem;padding:14px;border-radius:var(--radius);border:none;background:linear-gradient(135deg,#185FA5,#2A7AC0);font-size:15px;cursor:pointer;color:#fff;font-weight:700;font-family:'Noto Sans TC',sans-serif;letter-spacing:.03em}
+.btn-submit:hover{opacity:.9}
+.btn-reset{width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg);font-size:13px;cursor:pointer;color:var(--text2);margin-top:.65rem;font-family:'Noto Sans TC',sans-serif}
+
+.res{display:none}
+.res-intro{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
+.res-intro-title{font-size:17px;font-weight:700;margin-bottom:.4rem}
+.res-intro-sub{font-size:13px;color:var(--text2);line-height:1.65}
+
+.rc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.35rem;margin-bottom:.85rem}
+.rc.priority{border-width:2px}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;gap:8px}
+.rc-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rc-name{font-size:14px;font-weight:700;color:var(--text)}
+.rc-score{font-size:13px;font-weight:700;padding:3px 11px;border-radius:20px;white-space:nowrap}
+.bar-bg{height:9px;background:var(--bg);border-radius:5px;overflow:hidden;margin-bottom:.35rem;border:1px solid var(--border)}
+.bar-fill{height:100%;border-radius:5px;transition:width .75s ease}
+.band{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:.55rem}
+.lv-tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:10px;margin-bottom:.55rem;font-weight:500}
+.rc-desc{font-size:13px;color:var(--text2);line-height:1.7}
+.rc-ref{font-size:11px;color:var(--text3);margin-top:.45rem;padding-top:.45rem;border-top:1px solid var(--border);line-height:1.55}
+
+.cta{border:1px solid var(--blue-b);background:var(--blue-bg);border-radius:var(--radius);padding:1.35rem;margin-top:1rem}
+.cta-title{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:.6rem}
+.cta-body{font-size:13px;color:var(--blue);line-height:1.7;margin-bottom:.75rem}
+.cta-list{list-style:none;padding:0}
+.cta-list li{font-size:13px;color:var(--blue);padding:.3rem 0 .3rem 1.25rem;position:relative;line-height:1.6}
+.cta-list li::before{content:'→';position:absolute;left:0;opacity:.65}
+
+.disc{font-size:11px;color:var(--text3);line-height:1.65;padding:.65rem 1rem;border-left:3px solid var(--border2);margin-top:1.25rem}
+
+.footer{background:#0C3B6E;color:rgba(255,255,255,0.55);text-align:center;padding:1.5rem 1rem;font-size:11px;line-height:1.8}
+
+@media(max-width:500px){
+  .hero{padding:2rem 1rem 1.5rem}
+  .container{padding:1rem .75rem 3rem}
+  .sec{padding:1.1rem 1rem}
+  .rb span.lbl{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">家長自填問卷 ・ 觀察工具</div>
+  <h1>孩子狀態初步觀察問卷</h1>
+  <p>這份問卷不是醫療診斷。目的是幫助你初步看見：孩子的專注、情緒、睡眠、飲食、過敏與家庭流程，哪一個環節最需要先被支持。<br>每題請依照最近 2 週的狀況回答。</p>
+</div>
+
+<div class="sticky">
+  <div class="pg-top"><span>填答進度</span><span id="pg-pct">0 / 30 題</span></div>
+  <div class="pg-bar"><div class="pg-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<div class="container">
+
+<div class="notice">
+  <span class="notice-icon">📋</span>
+  <span>各區題目均有對應的學術文獻依據，來源標示於每區標題下方及結果頁面。本問卷僅供觀察參考，不取代醫師或專業人員的評估。</span>
+</div>
+
+<div id="fw">
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--blue-bg);color:var(--blue);font-size:18px">🧠</div>
+    <div>
+      <div class="sec-title">第一區：專注與學習啟動</div>
+      <div class="sec-ref">文獻依據：DSM-5 不專注向度（APA, 2013）；Barkley（1997）執行功能與任務啟動障礙理論</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">1. 孩子寫作業時，常常需要大人提醒很多次才開始</div><div class="rr" id="q1_1"></div></div>
+  <div class="qr"><div class="ql">2. 孩子容易寫到一半發呆、分心、玩東西</div><div class="rr" id="q1_2"></div></div>
+  <div class="qr"><div class="ql">3. 孩子常常漏看題目、忘記老師交代的事</div><div class="rr" id="q1_3"></div></div>
+  <div class="qr"><div class="ql">4. 孩子明明會，卻常因粗心或沒看清楚而出錯</div><div class="rr" id="q1_4"></div></div>
+  <div class="qr"><div class="ql">5. 孩子做需要持續專注的事情時，很容易放棄或拖延</div><div class="rr" id="q1_5"></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--red-bg);color:var(--red);font-size:18px">😤</div>
+    <div>
+      <div class="sec-title">第二區：情緒與衝動</div>
+      <div class="sec-ref">文獻依據：Shaw et al.（2014）ADHD 情緒調節困難研究；Barkley（2010）情緒自我調節不足理論</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">6. 孩子常因小事爆哭、爆怒或拒絕合作</div><div class="rr" id="q2_1"></div></div>
+  <div class="qr"><div class="ql">7. 孩子輸不起、被糾正時反應很大</div><div class="rr" id="q2_2"></div></div>
+  <div class="qr"><div class="ql">8. 孩子常常插話、搶話、等不及</div><div class="rr" id="q2_3"></div></div>
+  <div class="qr"><div class="ql">9. 孩子情緒來得很快，大人很難安撫</div><div class="rr" id="q2_4"></div></div>
+  <div class="qr"><div class="ql">10. 父母常覺得每天都在跟孩子吵架或拉扯</div><div class="rr" id="q2_5"></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--gray-bg);color:var(--gray);font-size:18px">🌙</div>
+    <div>
+      <div class="sec-title">第三區：睡眠與早晨狀態</div>
+      <div class="sec-ref">文獻依據：CSHQ 兒童睡眠習慣問卷（Owens et al., 2000）；Cortese et al.（2006）ADHD 兒童睡眠問題盛行率達 55–70%</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">11. 孩子晚上很難入睡，常常拖很久才睡</div><div class="rr" id="q3_1"></div></div>
+  <div class="qr"><div class="ql">12. 孩子睡覺容易翻來翻去、磨牙、打呼或張口呼吸</div><div class="rr" id="q3_2"></div></div>
+  <div class="qr"><div class="ql">13. 孩子早上起床困難，常常賴床或情緒不好</div><div class="rr" id="q3_3"></div></div>
+  <div class="qr"><div class="ql">14. 孩子睡醒後還是看起來很累</div><div class="rr" id="q3_4"></div></div>
+  <div class="qr"><div class="ql">15. 孩子睡不好時，隔天明顯更分心或更暴躁</div><div class="rr" id="q3_5"></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--green-bg);color:var(--green);font-size:18px">🥗</div>
+    <div>
+      <div class="sec-title">第四區：飲食、血糖與腸胃</div>
+      <div class="sec-ref">文獻依據：Grantham-McGregor（2005）早餐與認知表現；McCann et al.（2007）食物添加物與兒童行為；Pelsser et al.（2011）飲食介入與 ADHD 症狀改善</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">16. 孩子早餐常吃很少，或只吃麵包、餅乾、甜食</div><div class="rr" id="q4_1"></div></div>
+  <div class="qr"><div class="ql">17. 孩子很挑食，蔬菜、蛋白質或魚肉吃得少</div><div class="rr" id="q4_2"></div></div>
+  <div class="qr"><div class="ql">18. 孩子容易便祕、腹瀉、脹氣或肚子痛</div><div class="rr" id="q4_3"></div></div>
+  <div class="qr"><div class="ql">19. 孩子吃甜食、飲料或零食後，情緒或活動量明顯變化</div><div class="rr" id="q4_4"></div></div>
+  <div class="qr"><div class="ql">20. 孩子常常喊累、沒精神，或需要靠零食撐到下一餐</div><div class="rr" id="q4_5"></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--amber-bg);color:var(--amber);font-size:18px">🤧</div>
+    <div>
+      <div class="sec-title">第五區：過敏與身體負擔</div>
+      <div class="sec-ref">文獻依據：Tsai et al.（2011）台灣研究：過敏性鼻炎與 ADHD 風險顯著相關；Strom et al.（2016）異位性皮膚炎與 ADHD 共病；Craig et al.（2004）過敏導致睡眠中斷研究</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">21. 孩子有鼻過敏、鼻塞、打噴嚏或鼻涕倒流</div><div class="rr" id="q5_1"></div></div>
+  <div class="qr"><div class="ql">22. 孩子有異位性皮膚炎、濕疹、皮膚癢或容易抓</div><div class="rr" id="q5_2"></div></div>
+  <div class="qr"><div class="ql">23. 孩子容易咳嗽、氣喘、喉嚨卡痰或清喉嚨</div><div class="rr" id="q5_3"></div></div>
+  <div class="qr"><div class="ql">24. 過敏發作時，孩子的睡眠、情緒或專注力會變差</div><div class="rr" id="q5_4"></div></div>
+  <div class="qr"><div class="ql">25. 孩子常常看起來身體不舒服，但又說不清楚哪裡不舒服</div><div class="rr" id="q5_5"></div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:var(--gray-bg);color:var(--gray);font-size:18px">🏠</div>
+    <div>
+      <div class="sec-title">第六區：家庭流程與父母壓力</div>
+      <div class="sec-ref">文獻依據：Johnston & Mash（2001）ADHD 家庭親職壓力研究；Theule et al.（2013）親職壓力 meta-analysis，效果量 d＝0.87</div>
+    </div>
+  </div>
+  <div class="scale-row"><span class="sc">0 幾乎沒有</span><span class="sc">1 偶爾</span><span class="sc">2 常常</span><span class="sc">3 很常</span><span class="sc">4 幾乎每天</span></div>
+  <div class="qr"><div class="ql">26. 每天早上出門常常拖延、催促、吵架</div><div class="rr" id="q6_1"></div></div>
+  <div class="qr"><div class="ql">27. 寫作業時間常變成親子衝突</div><div class="rr" id="q6_2"></div></div>
+  <div class="qr"><div class="ql">28. 家裡規則常常因大人不同而不一致</div><div class="rr" id="q6_3"></div></div>
+  <div class="qr"><div class="ql">29. 父母常覺得「我已經講很多次了，但孩子還是做不到」</div><div class="rr" id="q6_4"></div></div>
+  <div class="qr"><div class="ql">30. 父母覺得自己很努力，但不知道下一步該先改哪裡</div><div class="rr" id="q6_5"></div></div>
+</div>
+
+<button class="btn-submit" onclick="calc()">查看結果，找出最需要支持的方向 →</button>
+<button class="btn-reset" onclick="resetAll()">↺ 重新填寫</button>
+</div>
+
+<div class="res" id="rw"><div id="rc"></div></div>
+
+</div>
+
+<div class="footer">
+  本問卷各區題目依據學術文獻設計，供家長觀察參考使用<br>
+  不取代兒童精神科、兒童心智科或臨床心理師之專業評估
+</div>
+
+<script>
+const qids=[['q1_1','q1_2','q1_3','q1_4','q1_5'],['q2_1','q2_2','q2_3','q2_4','q2_5'],['q3_1','q3_2','q3_3','q3_4','q3_5'],['q4_1','q4_2','q4_3','q4_4','q4_5'],['q5_1','q5_2','q5_3','q5_4','q5_5'],['q6_1','q6_2','q6_3','q6_4','q6_5']];
+const lbls=['幾乎沒有','偶爾','常常','很常','幾乎每天'];
+const secs=[
+  {name:'專注與學習啟動',emoji:'🧠',c:'#185FA5',bg:'#E6F1FB',bc:'#B5D4F4',
+   ref:'DSM-5 不專注向度（APA, 2013）；Barkley（1997）執行功能理論',
+   d:['孩子目前在專注啟動這一區的負擔較輕，繼續保持日常學習節奏。','這一區開始需要觀察——孩子可能在某些條件下容易分心或拖延。','這一區可能正在影響孩子。孩子不是不努力，而是「啟動」和「維持」注意力的能力需要更多支持。','建議優先處理。這一區對孩子的學習和日常很可能造成明顯負擔，建議尋求專業評估。']},
+  {name:'情緒與衝動',emoji:'😤',c:'#A32D2D',bg:'#FCEBEB',bc:'#F7C1C1',
+   ref:'Shaw et al.（2014）；Barkley（2010）情緒自我調節不足',
+   d:['孩子情緒調節目前負擔較輕。','孩子偶爾在情緒控制上需要協助，可以觀察觸發情境。','這一區可能正在影響孩子。孩子可能不是故意唱反調，而是情緒煞車與挫折耐受度比較吃力。','建議優先處理。情緒和衝動對親子關係與日常生活的影響已相當明顯。']},
+  {name:'睡眠與早晨狀態',emoji:'🌙',c:'#444441',bg:'#F1EFE8',bc:'#D3D1C7',
+   ref:'CSHQ（Owens et al., 2000）；Cortese et al.（2006）',
+   d:['孩子睡眠狀況目前負擔較輕。','開始需要觀察睡眠品質，特別是入睡時間與起床狀態。','這一區可能正在影響孩子。很多被說不專心的孩子，真正卡住的第一步可能是睡不好。','建議優先處理。睡眠問題很可能是孩子白天分心與情緒爆發的重要根源。']},
+  {name:'飲食、血糖與腸胃',emoji:'🥗',c:'#3B6D11',bg:'#EAF3DE',bc:'#C0DD97',
+   ref:'Grantham-McGregor（2005）；McCann et al.（2007）；Pelsser et al.（2011）',
+   d:['孩子飲食與腸胃負擔目前較輕。','開始注意飲食規律與早餐品質。','這一區可能正在影響孩子。大腦需要穩定能量，飲食、血糖或腸胃不穩，專注和情緒也容易被拖累。','建議優先處理。飲食模式很可能是孩子狀態起伏的重要因素，建議諮詢營養師。']},
+  {name:'過敏與身體負擔',emoji:'🤧',c:'#854F0B',bg:'#FAEEDA',bc:'#FAC775',
+   ref:'Tsai et al.（2011）台灣研究；Strom et al.（2016）；Craig et al.（2004）',
+   d:['孩子過敏負擔目前較輕。','開始觀察過敏症狀與睡眠、行為的關聯。','這一區可能正在影響孩子。長期鼻塞、睡不好、慢性發炎，可能讓孩子更分心、更煩躁。','建議優先處理。過敏負擔對孩子的睡眠和日間表現可能有顯著影響。']},
+  {name:'家庭流程與父母壓力',emoji:'🏠',c:'#444441',bg:'#F1EFE8',bc:'#D3D1C7',
+   ref:'Johnston & Mash（2001）；Theule et al.（2013）meta-analysis，d＝0.87',
+   d:['家庭流程目前運作相對順暢。','開始注意家庭節奏，特別是早晨和作業時間。','這一區可能正在影響孩子。不是父母不夠努力，而是家裡需要一套更清楚、更一致的方法。','建議優先處理。家庭流程與親職壓力很可能形成惡性循環，需要結構性的調整策略。']}
+];
+const lvLabels=['目前負擔較低','需要開始觀察','可能正在影響孩子','建議優先處理'];
+const lvColors=['#3B6D11','#5F5E5A','#854F0B','#A32D2D'];
+const lvBgs=['#EAF3DE','#F1EFE8','#FAEEDA','#FCEBEB'];
+
+function build(){
+  qids.flat().forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    lbls.forEach((t,i)=>{
+      const b=document.createElement('button');b.className='rb';
+      b.innerHTML='<span style="font-size:15px;font-weight:700">'+i+'</span><span class="lbl">'+t+'</span>';
+      b.dataset.g=id;b.dataset.v=String(i);
+      b.onclick=()=>{el.querySelectorAll('.rb').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');upP();};
+      el.appendChild(b);
+    });
+  });
+}
+
+function upP(){
+  const total=30,done=qids.flat().filter(id=>document.querySelector('[data-g="'+id+'"].sel')).length;
+  document.getElementById('prog').style.width=Math.round(done/total*100)+'%';
+  document.getElementById('pg-pct').textContent=done+' / '+total+' 題';
+}
+
+function lv(s){return s<=5?0:s<=10?1:s<=15?2:3;}
+
+function calc(){
+  const scores=qids.map(g=>{let s=0;g.forEach(id=>{const el=document.querySelector('[data-g="'+id+'"].sel');if(el)s+=parseInt(el.dataset.v);});return s;});
+  const sorted=[...scores.map((s,i)=>({s,i}))].sort((a,b)=>b.s-a.s);
+  let html='<div class="res-intro"><div class="res-intro-title">你的填答結果</div><div class="res-intro-sub">以下六大方向依分數高低排列。分數愈高，代表這一區目前可能需要更多支持。每區滿分 20 分。</div></div>';
+
+  sorted.forEach(({s,i},rank)=>{
+    const sec=secs[i],l=lv(s),pct=Math.round(s/20*100),isPri=l>=2;
+    html+='<div class="rc'+(isPri?' priority':'')+'"'+(isPri?' style="border-color:'+sec.bc+'"':'')+'>'+
+      '<div class="rc-top"><div class="rc-left">'+
+      '<span style="font-size:20px">'+sec.emoji+'</span>'+
+      (rank===0?'<span style="font-size:11px;padding:2px 9px;border-radius:10px;background:'+sec.bg+';color:'+sec.c+';font-weight:700">最高分</span>':'')+
+      '<span class="rc-name">'+sec.name+'</span></div>'+
+      '<span class="rc-score" style="background:'+sec.bg+';color:'+sec.c+'">'+s+' / 20</span></div>'+
+      '<div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+sec.c+'"></div></div>'+
+      '<div class="band"><span>0–5 較低</span><span>6–10 觀察</span><span>11–15 需支持</span><span>16–20 優先</span></div>'+
+      '<span class="lv-tag" style="background:'+lvBgs[l]+';color:'+lvColors[l]+'">'+lvLabels[l]+'</span>'+
+      '<div class="rc-desc">'+sec.d[l]+'</div>'+
+      '<div class="rc-ref">文獻來源：'+sec.ref+'</div></div>';
+  });
+
+  const high=scores.filter(s=>s>=11).length;
+  if(high>=2){
+    html+='<div class="cta"><div class="cta-title">你的孩子不只一區分數偏高</div>'+
+      '<div class="cta-body">這代表孩子的問題可能不是單一原因。他需要的不是更多零散方法，而是一張能看懂孩子狀態的地圖。<br><br>在直播中，我會帶你看懂：</div>'+
+      '<ul class="cta-list"><li>孩子為什麼不是只有不專心</li><li>睡眠、過敏、飲食、情緒如何互相影響</li><li>父母可以先從哪一個方向開始調整</li><li>為什麼有些方法你明明做了，卻一直沒有效</li></ul></div>';
+  }
+
+  html+='<div class="disc">本問卷文獻依據：DSM-5（APA, 2013）、Barkley（1997, 2010）、Shaw et al.（2014）、CSHQ（Owens et al., 2000）、Cortese et al.（2006）、Grantham-McGregor（2005）、McCann et al.（2007）、Pelsser et al.（2011）、Tsai et al.（2011）、Strom et al.（2016）、Craig et al.（2004）、Johnston & Mash（2001）、Theule et al.（2013）。本問卷為觀察性工具，不取代醫師或專業人員評估。</div>';
+  html+='<button class="btn-reset" onclick="showForm()" style="width:100%;margin-top:1rem">← 重新填寫</button>';
+
+  document.getElementById('rc').innerHTML=html;
+  document.getElementById('fw').style.display='none';
+  document.getElementById('rw').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showForm(){document.getElementById('fw').style.display='block';document.getElementById('rw').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+function resetAll(){document.querySelectorAll('.rb.sel').forEach(b=>b.classList.remove('sel'));upP();}
+build();
+</script>
+</body>
+</html>
